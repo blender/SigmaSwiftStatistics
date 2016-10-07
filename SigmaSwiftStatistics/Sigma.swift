@@ -21,7 +21,7 @@ public struct Sigma {
   
   */
   public static func max(_ values: [Double]) -> Double? {
-    if let maxValue = values.max() {
+    if let maxValue = values.maxElement() {
       return maxValue
     }
     
@@ -41,7 +41,7 @@ public struct Sigma {
 
   */
   public static func min(_ values: [Double]) -> Double? {
-    if let minValue = values.min() {
+    if let minValue = values.minElement() {
       return minValue
     }
     
@@ -61,7 +61,7 @@ public struct Sigma {
 
   */
   public static func sum(_ values: [Double]) -> Double {
-    return values.reduce(0, +)
+    return values.reduce(0, combine: +)
   }
   
   /**
@@ -109,7 +109,7 @@ public struct Sigma {
     if count == 0 { return nil }
     let sorted = sort(values)
     
-    if count.truncatingRemainder(dividingBy: 2) == 0 {
+    if count % 2 == 0 {
       // Even number of items - return the mean of two middle values
       let leftIndex = Int(count / 2 - 1)
       let leftValue = sorted[leftIndex]
@@ -138,9 +138,9 @@ public struct Sigma {
   public static func medianLow(_ values: [Double]) -> Double? {
     let count = Double(values.count)
     if count == 0 { return nil }
-    let sorted = values.sorted { $0 < $1 }
+    let sorted = values.sort { $0 < $1 }
     
-    if count.truncatingRemainder(dividingBy: 2) == 0 {
+    if count % 2 == 0 {
       // Even number of items - return the lower of the two middle values
       return sorted[Int(count / 2) - 1]
     } else {
@@ -166,7 +166,7 @@ public struct Sigma {
   public static func medianHigh(_ values: [Double]) -> Double? {
     let count = Double(values.count)
     if count == 0 { return nil }
-    let sorted = values.sorted { $0 < $1 }
+    let sorted = values.sort { $0 < $1 }
     return sorted[Int(count / 2)]
   }
   
@@ -353,7 +353,7 @@ public struct Sigma {
         
         var sum:Double = 0
         
-        for (index, xElement) in x.enumerated() {
+        for (index, xElement) in x.enumerate() {
           let yElement = y[index]
           
           sum += (xElement - xMean) * (yElement - yMean)
@@ -406,7 +406,7 @@ public struct Sigma {
       
       var sum:Double = 0
   
-      for (index, xElement) in x.enumerated() {
+      for (index, xElement) in x.enumerate() {
         let yElement = y[index]
         
         sum += (xElement - xMean) * (yElement - yMean)
@@ -446,7 +446,7 @@ public struct Sigma {
 
   */
   public static func pearson(x: [Double], y: [Double]) -> Double? {
-    if let cov = covariancePopulation(x: x, y: y),
+    if let cov = covariancePopulation(x, y: y),
       let σx = standardDeviationPopulation(x),
       let σy = standardDeviationPopulation(y) {
         
@@ -499,7 +499,7 @@ public struct Sigma {
     // ---------------
 
     let rankInteger = Int(floor(rank))
-    let rankFraction = Double(rank.truncatingRemainder(dividingBy: 1))
+    let rankFraction = Double(rank % 1)
     
     // 4. Find the element at rank
     // ---------------
@@ -519,7 +519,7 @@ public struct Sigma {
   // MARK: - Private functionality
   
   private static func sort(_ values: [Double]) -> [Double] {
-    return values.sorted { $0 < $1 }
+    return values.sort() { $0 < $1 }
   }
 }
 
